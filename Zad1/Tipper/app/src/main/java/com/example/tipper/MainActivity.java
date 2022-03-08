@@ -10,22 +10,17 @@ import android.widget.SeekBar; // for changing the tip percentage
 import android.widget.SeekBar.OnSeekBarChangeListener; // SeekBar listener
 import android.widget.TextView; // for displaying text
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat; // for currency formatting
 
 public class MainActivity extends AppCompatActivity {
 
-    // currency and percent formatter objects
-    private static final NumberFormat currencyFormat =
-            NumberFormat.getCurrencyInstance();
-    private static final NumberFormat percentFormat =
-            NumberFormat.getPercentInstance();
 
-    private double billAmount = 0.0; // bill amount entered by the user
-    private double percent = 0.15; // initial tip percentage
-    private TextView amountTextView; // shows formatted bill amount
-    private TextView percentTextView; // shows tip percentage
-    private TextView tipTextView; // shows calculated tip amount
-    private TextView totalTextView; // shows calculated total bill amount
+    private double weight = 0.0; // initial weight percentage
+    private double height = 0.0; // initial height percentage
+    private TextView weightTextView; // shows formatted bill amount
+    private TextView heightTextView; // shows tip percentage
+    private TextView bmiTextView; // shows calculated total bill amount
 
     // called when the activity is first created
     @Override
@@ -34,73 +29,80 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main); // inflate the GUI
 
         // get references to programmatically manipulated TextViews
-        amountTextView = (TextView) findViewById(R.id.amountTextView);
-        percentTextView = (TextView) findViewById(R.id.percentTextView);
-        tipTextView = (TextView) findViewById(R.id.tipTextView);
-        totalTextView = (TextView) findViewById(R.id.totalTextView);
-        tipTextView.setText(currencyFormat.format(0));
-        totalTextView.setText(currencyFormat.format(0));
+        weightTextView = (TextView) findViewById(R.id.weightTextView);
+        heightTextView = (TextView) findViewById(R.id.heightTextView);
+        bmiTextView = (TextView) findViewById(R.id.bmiTextView);
 
         // set amountEditText's TextWatcher
-        EditText amountEditText =
-                (EditText) findViewById(R.id.amountEditText);
-        amountEditText.addTextChangedListener(amountEditTextWatcher);
+        EditText weightEditText =
+                (EditText) findViewById(R.id.weightEditText);
+        weightEditText.addTextChangedListener(weightEditTextWatcher);
 
-        // set percentSeekBar's OnSeekBarChangeListener
-        SeekBar percentSeekBar =
-                (SeekBar) findViewById(R.id.percentSeekBar);
-        percentSeekBar.setOnSeekBarChangeListener(seekBarListener);
+        EditText heightEditText =
+                (EditText) findViewById(R.id.heightEditText);
+        heightEditText.addTextChangedListener(heightEditTextWatcher);
+
     }
 
     // calculate and display tip and total amounts
     private void calculate() {
-        // format percent and display in percentTextView
-        percentTextView.setText(percentFormat.format(percent));
 
-        // calculate the tip and total
-        double tip = billAmount * percent;
-        double total = billAmount + tip;
+        DecimalFormat df = new DecimalFormat("##.##");
 
-        // display tip and total formatted as currency
-        tipTextView.setText(currencyFormat.format(tip));
-        totalTextView.setText(currencyFormat.format(total));
+        // calculate the bmi
+        double bmi = weight/(height*height);
+
+        // display mbi
+        if (height > 0.0 && weight > 0.0) {
+            bmiTextView.setText(df.format(bmi));
+        } else {
+            bmiTextView.setText("");
+        }
     }
 
-    // listener object for the SeekBar's progress changed events
-    private final OnSeekBarChangeListener seekBarListener =
-            new OnSeekBarChangeListener() {
-                // update percent, then call calculate
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress,
-                                              boolean fromUser) {
-                    percent = progress / 100.0; // set percent based on progress
-                    calculate(); // calculate and display tip and total
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) { }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) { }
-            };
-
     // listener object for the EditText's text-changed events
-    private final TextWatcher amountEditTextWatcher = new TextWatcher() {
-        // called when the user modifies the bill amount
+    private final TextWatcher weightEditTextWatcher = new TextWatcher() {
+        // called when the user modifies the weight amount
         @Override
         public void onTextChanged(CharSequence s, int start,
                                   int before, int count) {
 
-            try { // get bill amount and display currency formatted value
-                billAmount = Double.parseDouble(s.toString()) / 100.0;
-                amountTextView.setText(currencyFormat.format(billAmount));
+            try { // get weight
+                weight = Double.parseDouble(s.toString());
+                weightTextView.setText(s.toString());
             }
             catch (NumberFormatException e) { // if s is empty or non-numeric
-                amountTextView.setText("");
-                billAmount = 0.0;
+                weightTextView.setText("");
+                weight = 0.0;
             }
 
-            calculate(); // update the tip and total TextViews
+            calculate(); // update the bmi TextView
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) { }
+
+        @Override
+        public void beforeTextChanged(
+                CharSequence s, int start, int count, int after) { }
+    };
+
+    private final TextWatcher heightEditTextWatcher = new TextWatcher() {
+        // called when the user modifies the height amount
+        @Override
+        public void onTextChanged(CharSequence s, int start,
+                                  int before, int count) {
+
+            try { // get height
+                height = Double.parseDouble(s.toString());
+                heightTextView.setText(s.toString());
+            }
+            catch (NumberFormatException e) { // if s is empty or non-numeric
+                heightTextView.setText("");
+                height = 0.0;
+            }
+
+            calculate(); // update the bmi TextView
         }
 
         @Override
