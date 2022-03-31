@@ -39,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        recipesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchActivity(RecipeActivity.class);
+            }
+        });
+
     }
 
     private void launchActivity(Class activity){
