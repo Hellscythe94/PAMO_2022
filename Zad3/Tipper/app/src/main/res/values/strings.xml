@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Healthy App</string>
+    <string name="enter_weight">Enter Weight (KG)</string>
+    <string name="enter_height">Enter Height (m)</string>
+    <string name="enter_age">Enter Age</string>
+    <string name="bmi">BMI</string>
+    <string name="total">Total</string>
+    <string name="bmi_button">BMI Calculator</string>
+    <string name="kcal_button">Kcal Calculator</string>
+    <string name="cannon_button">Cannon Game</string>
+    <string name="recipes">Recipes</string>
+    <string name="gender">Gender</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="age">Age</string>
+    <string name="recipe1Name">Shrimp And Broccoli</string>
+    <string name="recipe2Name">Pesto Salmon</string>
+
+    <string name="results_format">Shots fired: %1$d\nTotal time: %2$.1f</string>
+    <string name="reset_game">Reset Game</string>
+    <string name="win">You win!</string>
+    <string name="lose">You lose!</string>
+    <string name="time_remaining_format">Time remaining: %.1f seconds</string>
+</resources>
